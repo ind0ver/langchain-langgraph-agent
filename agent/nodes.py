@@ -2,7 +2,6 @@
 from langchain_core.messages import SystemMessage
 from langgraph.prebuilt import ToolNode
 from langgraph.types import interrupt, Command
-
 from agent.state import AgentState
 from agent.tools import agent_tools, sensitive_tools
 from agent.llm import llm
@@ -51,7 +50,7 @@ def approval_node(state: AgentState) -> dict | Command:
     if sensitive_calls:
         # interrupt() pauses the graph and returns this to the caller
         decision = interrupt({
-            "question": "The agent wants to search the web. Approve?",
+            "question": "The agent wants to use the next tool. Approve?",
             "tool_calls": [
                 {"name": tc["name"], "args": tc["args"]}
                 for tc in sensitive_calls
