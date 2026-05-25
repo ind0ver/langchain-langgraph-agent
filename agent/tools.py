@@ -2,7 +2,6 @@ import subprocess
 from datetime import datetime
 from langchain_core.tools import tool
 from ddgs import DDGS
-from agent.rag import search_vector_store
 from agent.sqlite_db import run_sql_query, get_db_schema
 from agent.rag import search_vector_store
 from config import MAX_WEB_SEARCH_RESULTS
@@ -104,6 +103,6 @@ def run_powershell_command(command: str) -> str:
 
 
 # Collect all tools into a list for the graph
-agent_tools = [get_current_time, calculate, search_web, search_vector_store, run_sql_query, get_db_schema, search_vector_store, run_terminal_command]
+agent_tools = [get_current_time, calculate, search_web, search_vector_store, run_sql_query, get_db_schema]
 
 sensitive_tools = {"run_terminal_command", "run_powershell_command"}  # Tools that need human approval
