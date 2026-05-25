@@ -26,9 +26,20 @@ def main():
                 config=config,
                 stream_mode="updates",
             ):
-                for node_name, output in event.items():
-                    if node_name == "output":
-                        print(f"Agent: {output.get('final_answer', '')}")
+                for node_name, node_output in event.items():
+                    print(f"[Node: {node_name}]")
+                    if node_name == "reasoning":
+                        msg = node_output["messages"][-1]
+                        if hasattr(msg, "tool_calls") and msg.tool_calls:
+                            for tc in msg.tool_calls:
+                                print(f"  → Calling tool: {tc['name']}({tc['args']})")
+                        else:
+                            print(f"  → Response: {msg.content[:250]}...")
+                    elif node_name == "tools":
+                        for msg in node_output.get("messages", []):
+                            print(f"  → Tool result: {msg.content[:250]}...")
+                    elif node_name == "output":
+                        print(f"  → Agent: \n{node_output.get('final_answer', '')}")
 
 
 if __name__ == "__main__":
